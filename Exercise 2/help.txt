@@ -1,0 +1,20 @@
+Open the project file in "webcam2", then klick "run".
+
+The project file is for Microsoft Visual Studio Express 2013 (you can download it for free from the Microsoft website).
+If you want to use a different version, you may need to change some of the project settings.
+It was tested under Windows 10.
+
+If you want to use a different compiler or IDE, please install OpenCV 2.4.9 from
+http://opencv.org/downloads.html
+You just need to place the main.cpp file in your project and set the correct paths to the OpenCV files.
+
+If it does not find the correct function definitions or DLLs: Change the paths to the folders in the project settings.
+
+If it does not show a camera image after you start it, check that it can actually find a camera attached to the computer.
+You may need to make sure in the device manager that the camera is properly installed.
+
+If you notice that the Debug version (default) ist too slow, try choosing Release in the drop down menu.
+You will not be able to use the debugger, but it will run significantly faster. If that does not help,
+try to use a webcam with a higher frame rate.
+
+If you still experience strange problems, feel free to send me an email or work on the high-end graphics workstations in the HCI lab.
