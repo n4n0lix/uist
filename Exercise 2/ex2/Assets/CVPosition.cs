@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net;
@@ -14,9 +14,12 @@ public class CVPosition : MonoBehaviour {
     public int maxWebcamWidth = 640;
     public int maxWebcamHeight = 480;
 
-    private float x;
-    private float y;
-    private float r;
+    private float? x;
+    private float? y;
+    private float? r;
+
+	private float  d = 5f; // Distance
+	private float? A; 
 
     private string lastPacket;
     private Thread listenerThread;
@@ -33,12 +36,28 @@ public class CVPosition : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        //Debug.Log("[x: " + x + ", y: " + y + ", r: " + r + "]");
+        // Check if we have position data
+		if (!x.HasValue || !y.HasValue || !r.HasValue)
+			return; 
 
-        float sceneX = (x - maxWebcamWidth / 2 ) * 1/50;
-        float sceneY = (y - maxWebcamHeight / 2) * 1/50;
+		// Do we know A yet?
+		if (A == null) {
+			A = 2 * Mathf.Atan (r.Value / d);
+			Debug.Log ("A: " + A);
+		}
 
-        transform.position = new Vector3(-sceneX, -sceneY);
+		d = Mathf.Tan(A.Value/2) / r.Value;
+		d = d * 10;
+		Debug.Log ("d: " + d);
+
+        float sceneX = (x.Value - maxWebcamWidth / 2 ) * 1/50;
+		float sceneY = (y.Value - maxWebcamHeight / 2) * 1/50;
+		float sceneZ = d;
+
+		Matrix4x4 translatio = Matrix4x4.Translate (new Vector3 (-sceneX, -sceneY, sceneZ));
+		Matrix4x4 cameraCalib = Matrix4x4.Perspective
+
+        transform.position = new Vector3(-sceneX, -sceneY, sceneZ);
         transform.localScale = new Vector3(1, 1, 1); 
     }
 
