@@ -19,7 +19,7 @@ public class CVPosition : MonoBehaviour {
     private float? r;
 
 	private float  d = 5f; // Distance
-	private float? A; 
+	private float? A;      // Angle A
 
     private string lastPacket;
     private Thread listenerThread;
@@ -40,22 +40,20 @@ public class CVPosition : MonoBehaviour {
 		if (!x.HasValue || !y.HasValue || !r.HasValue)
 			return; 
 
-		// Do we know A yet?
+		// Calculate A once, based on an initial assumed distance
 		if (A == null) {
 			A = 2 * Mathf.Atan (r.Value / d);
 			Debug.Log ("A: " + A);
 		}
 
 		d = Mathf.Tan(A.Value/2) / r.Value;
-		d = d * 10;
 		Debug.Log ("d: " + d);
 
         float sceneX = (x.Value - maxWebcamWidth / 2 ) * 1/50;
 		float sceneY = (y.Value - maxWebcamHeight / 2) * 1/50;
-		float sceneZ = d;
+		float sceneZ = d * 10;
 
-		Matrix4x4 translatio = Matrix4x4.Translate (new Vector3 (-sceneX, -sceneY, sceneZ));
-		Matrix4x4 cameraCalib = Matrix4x4.Perspective
+		Matrix4x4 translation = Matrix4x4.Translate (new Vector3 (-sceneX, -sceneY, sceneZ));
 
         transform.position = new Vector3(-sceneX, -sceneY, sceneZ);
         transform.localScale = new Vector3(1, 1, 1); 
@@ -83,8 +81,6 @@ public class CVPosition : MonoBehaviour {
                 this.x = BitConverter.ToSingle(data,  0);
                 this.y = BitConverter.ToSingle(data,  4);
                 this.r = BitConverter.ToSingle(data,  8);
-
-                //Debug.Log("'[x: " + x + ", y: " + y + ", r: " + r + "]");
             }
             catch (Exception err)
             {
