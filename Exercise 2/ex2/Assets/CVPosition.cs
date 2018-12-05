@@ -53,8 +53,6 @@ public class CVPosition : MonoBehaviour {
 		float sceneY = (y.Value - maxWebcamHeight / 2) * 1/50;
 		float sceneZ = d * 10;
 
-		Matrix4x4 translation = Matrix4x4.Translate (new Vector3 (-sceneX, -sceneY, sceneZ));
-
         transform.position = new Vector3(-sceneX, -sceneY, sceneZ);
         transform.localScale = new Vector3(1, 1, 1); 
     }
